@@ -16,12 +16,12 @@ int main( int argc, char** argv )
 	std::vector<std::vector<VisgraphPoint>> polygons;
 	
 	std::vector<VisgraphPoint> polygon1;
-	polygon1.push_back(VisgraphPoint(10,5,0));
+	polygon1.push_back(VisgraphPoint(5,0,0));
 	polygon1.push_back(VisgraphPoint(15,6,0));
-	polygon1.push_back(VisgraphPoint(13,8,0));
+	polygon1.push_back(VisgraphPoint(15,10,0));
 	polygon1.push_back(VisgraphPoint(18,13,0));
 	polygon1.push_back(VisgraphPoint(13,16,0));
-	polygon1.push_back(VisgraphPoint(8,13,0));
+	polygon1.push_back(VisgraphPoint(8,16,0));
 	polygon1.push_back(VisgraphPoint(5,7,0));
 	polygons.push_back(polygon1);
 	
@@ -45,8 +45,8 @@ int main( int argc, char** argv )
 	
 	VisgraphGraph graph(polygons);
 	//要先进行起始点与末端点位置判断
-	VisgraphPoint start(0,0);
-	VisgraphPoint goal(14,12);
+	VisgraphPoint start(5,0);
+	VisgraphPoint goal(10,16);
 	AStarMethod astart(&graph);
 
 	std::vector<VisgraphPoint> path_vec = astart.CalShortestPath(start,goal);

@@ -47,6 +47,27 @@ void VisgraphGraph::Build(VisgraphPoint& start, VisgraphPoint& goal)
 	//为了能够重复建图，每次对于不同的起始终止点都得清楚edges和graph
 	graph_.clear();
 	edges_.clear();
+	
+	//判断起始点或目标点是否在障碍物的边或顶点上，是的话，进行排除
+	for(auto& poly : polygons_)
+	{
+		for(auto& e : poly.second)
+		{
+			float slope = (e.p1_.y_ - e.p2_.y_)/(e.p1_.x_ - e.p2_.x_);
+			float __y   = (start.x_ - e.p1_.x_)*slope + e.p1_.y_;
+			if(__y == start.y_)
+			{
+				return;
+			}
+			
+			__y = (goal.x_ - e.p1_.x_)*slope + e.p1_.y_;
+			if(__y == goal.y_)
+			{
+				return;
+			}
+		}
+	}
+
 	for(const auto& edges : polygons_)
 	{
 		for(const auto& edge : edges.second)
@@ -111,7 +132,7 @@ void VisgraphGraph::Build(VisgraphPoint& start, VisgraphPoint& goal)
 bool VisgraphGraph::Intersect(const VisgraphPoint& _p1, const VisgraphPoint& _p2)
 {
 	//先对多边形障碍物的内点连接进行排查
-	if(_p1.polygon_id_ == _p2.polygon_id_ && _p1.polygon_id_ != -1)
+	if(_p1.polygon_id_ == _p2.polygon_id_ && _p1.polygon_id_ != -1 && _p1.polygon_id_ != -2)
 	{
 		float x_mean = 0.5*_p1.x_ + 0.5*_p2.x_;
 		float y_mean = 0.5*_p1.y_ + 0.5*_p2.y_;
