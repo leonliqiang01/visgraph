@@ -8,6 +8,11 @@
 #include <cmath>
 #include <boost/concept_check.hpp>
 
+#include <geos/geos.h>
+#define GEOS_DEBUG
+
+using namespace geos::geom;
+
 class VisgraphPoint
 {
 public:
@@ -39,7 +44,7 @@ public:
 	VisgraphPoint p1_;
 	VisgraphPoint p2_;
 	float edge_cost_;
-	VisgraphEdge(VisgraphPoint& _p1, VisgraphPoint& _p2):p1_(_p1),p2_(_p2)
+	VisgraphEdge(const VisgraphPoint& _p1, const VisgraphPoint& _p2):p1_(_p1),p2_(_p2)
 	{
 		edge_cost_ = p1_.distance(p2_);
 	}
@@ -107,8 +112,30 @@ public:
 	
 	VisgraphGraph(const std::vector<std::vector<VisgraphPoint>>& polygons);
 	virtual ~VisgraphGraph()
-	{}
+	{
+		for(int i = 0; i < obstacle_polygons_.size(); i++)
+		{
+			delete obstacle_polygons_.at(i);
+		}
+		delete obstacle_collection_;
+		delete boundary_polygon_;
+	}
 	void Build(VisgraphPoint& start, VisgraphPoint& goal);
+protected:
+	GeometryFactory::unique_ptr geometry_factory_;
+	std::vector<Geometry*> obstacle_polygons_;
+	GeometryCollection* obstacle_collection_;
+	Polygon* boundary_polygon_;
+	Polygon* whole_polygon_;
+	bool whole_polygon_isvalid_;
+	
+	//综合判断
 	bool Intersect(const VisgraphPoint& _p1, const VisgraphPoint& _p2);
+	//点是否在多边形里面，边界上视为外面
+	bool IsInside(const VisgraphPoint& _p, const std::unordered_set<VisgraphEdge, HashEdge>& _polygon);
+	//点是否在多边形外面，边界上视为里面
+	bool IsOutside(const VisgraphPoint& _p, const std::unordered_set<VisgraphEdge, HashEdge>& _polygon);
+	//线是否跟多边形有交点，即使是与边重合也算有交点，线经过顶点也算有交点
+	bool IsIntersect(const VisgraphEdge& _e, const std::unordered_set<VisgraphEdge, HashEdge>& _polygon);
 };
 #endif

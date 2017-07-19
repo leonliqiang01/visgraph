@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(visgraph)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -o3")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} geos-config --cflags")
+set(CMAKE_LD_FLAGS "${CMAKE_LD_FLAGS} geos-config --ldflags")
 
 find_package(catkin REQUIRED
 	roscpp
@@ -26,4 +28,4 @@ link_directories(
 )
 add_executable(visgraph src/main.cpp src/visgraph.cpp src/astar.cpp)
 add_dependencies(visgraph visgraph_generate_messages_cpp)
-target_link_libraries(visgraph ${catkin_LIBRARIES})
+target_link_libraries(visgraph ${catkin_LIBRARIES} geos)

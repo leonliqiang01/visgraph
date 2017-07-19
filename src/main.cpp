@@ -20,7 +20,7 @@ int main( int argc, char** argv )
 	polygon1.push_back(VisgraphPoint(15,6,0));
 	polygon1.push_back(VisgraphPoint(15,10,0));
 	polygon1.push_back(VisgraphPoint(18,13,0));
-	polygon1.push_back(VisgraphPoint(13,16,0));
+	polygon1.push_back(VisgraphPoint(13,14,0));
 	polygon1.push_back(VisgraphPoint(8,16,0));
 	polygon1.push_back(VisgraphPoint(5,7,0));
 	polygons.push_back(polygon1);
@@ -40,13 +40,22 @@ int main( int argc, char** argv )
 	polygon3.push_back(VisgraphPoint(25,7,2));
 	polygon3.push_back(VisgraphPoint(22,12,2));
 	polygons.push_back(polygon3);
-
+	std::vector<VisgraphPoint> polygon4;
+	polygon4.push_back(VisgraphPoint(-5,-5,-2));
+	polygon4.push_back(VisgraphPoint(50,-5,-2));
+	polygon4.push_back(VisgraphPoint(50,40,-2));
+	polygon4.push_back(VisgraphPoint(30,40,-2));
+	polygon4.push_back(VisgraphPoint(30,20,-2));
+	polygon4.push_back(VisgraphPoint(15,20,-2));
+	polygon4.push_back(VisgraphPoint(15,40,-2));
+	polygon4.push_back(VisgraphPoint(-5,40,-2));
+	polygons.push_back(polygon4);
 	std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
 	
 	VisgraphGraph graph(polygons);
 	//要先进行起始点与末端点位置判断
-	VisgraphPoint start(5,0);
-	VisgraphPoint goal(10,16);
+	VisgraphPoint start(13.5,35);
+	VisgraphPoint goal(29,9);
 	AStarMethod astart(&graph);
 
 	std::vector<VisgraphPoint> path_vec = astart.CalShortestPath(start,goal);
